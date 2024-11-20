@@ -10,11 +10,10 @@ public class menuController : MonoBehaviour
     public GameObject pauseMenu;
     public bool isPaused;
 
-    private PlayerController playerController; // Reference to the PlayerController
+    private PlayerController playerController;
 
     void Start()
     {
-        // Find the PlayerController in the scene
         playerController = FindObjectOfType<PlayerController>();
     }
 
@@ -41,7 +40,6 @@ public class menuController : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        // Set the PlayerController's isPaused to true
         if (playerController != null)
         {
             playerController.isPaused = true;
@@ -56,7 +54,6 @@ public class menuController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        // Set the PlayerController's isPaused to false
         if (playerController != null)
         {
             playerController.isPaused = false;

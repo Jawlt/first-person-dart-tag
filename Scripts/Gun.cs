@@ -9,11 +9,22 @@ public class Gun : MonoBehaviour
     public Camera playerCamera;
 
     private float nextFireTime = 0f;
+    private AudioSource audioSource;
+
+    public bool isIt;
+
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            Debug.LogWarning("AudioSource is missing on the gun object. Please add one.");
+        }
+    }
 
     void Update()
     {
-        // Check if it's time to shoot again
-        if (Input.GetButtonDown("Fire1") && Time.time >= nextFireTime)
+        if (isIt && Input.GetButtonDown("Fire1") && Time.time >= nextFireTime)
         {
             Shoot();
             nextFireTime = Time.time + fireRate;
@@ -23,18 +34,26 @@ public class Gun : MonoBehaviour
     void Shoot()
     {
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
-
-        // Get the direction the camera is facing at the time of shooting
         Vector3 shootDirection = playerCamera.transform.forward;
-
-        // Rotate the bullet to face the direction of the shootDirection
         bullet.transform.forward = shootDirection;
 
-        // Set the bullet's velocity to move in the shootDirection
         Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
         if (bulletRb != null)
         {
             bulletRb.velocity = shootDirection * bulletSpeed;
         }
+
+        if (audioSource != null)
+        {
+            audioSource.Play();
+        }
+
+        Destroy(bullet, 2f);
+    }
+
+    public void SetIt(bool status)
+    {
+        isIt = status;
+        Debug.Log($"Gun: Player is now {(isIt ? "it" : "not it")}!");
     }
 }
